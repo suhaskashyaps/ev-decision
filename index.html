@@ -140,6 +140,42 @@
   }
   .sources { max-width: 56em; }
   .foot { margin-top: 72px; color: var(--ash); }
+
+  .picker { margin: 48px 0 0; padding-top: 28px; border-top: 1px solid var(--hairline); }
+  .picks { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 16px; }
+  .pick {
+    background: var(--ink);
+    color: var(--ash);
+    border: 1px solid var(--hairline);
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 13px;
+    line-height: 20px;
+    font-weight: 400;
+    padding: 10px 12px;
+    cursor: pointer;
+  }
+  .pick.on { color: var(--vellum); border-color: rgba(244,242,236,0.35); }
+  .compare {
+    background: var(--vellum);
+    color: var(--ink);
+    border: 0;
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 11.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 12px 18px;
+    cursor: pointer;
+  }
+  .compare:disabled { opacity: 0.35; cursor: not-allowed; }
+  .cars.trio { grid-template-columns: 1fr 1fr 1fr; min-width: 0; }
+  .split.trio { grid-template-columns: 1fr 1fr 1fr; }
+  .matrix.trio { min-width: 0; }
+  [hidden] { display: none !important; }
+  @media (max-width: 980px) {
+    .cars.trio, .split.trio { grid-template-columns: 1fr; }
+    .picker { margin-top: 32px; }
+  }
   @media (max-width: 980px) {
     .verdicts, .split { grid-template-columns: 1fr; }
     .crit { grid-template-columns: 40px 1fr; }
@@ -173,25 +209,45 @@
       <p style="margin:0; color: var(--stone); font-weight: 300;">Sealion 7 Dynamic, not Premium, not Model Y, not the EX30. VST Bommanahalli on-road ₹49,15,961 (quote 21 Aug 2026, KA tax charged, not an invoice). The EX30 is the prettier small car. The Sealion is the pretty car that still has a back seat. Model Y is not the elegant one.</p>
     </aside>
 
+
+    <aside class="picker" id="picker">
+      <p class="eyebrow">Three at a time</p>
+      <h2>Pick a trio</h2>
+      <p class="caption">Exactly three. Default is three makers: Pack Two, Sealion Dynamic, Model Y. Pack Three is in the list if you want the flagship 9e instead.</p>
+      <div class="picks">
+        <button type="button" class="pick on" data-pick="xev-two" aria-pressed="true">XEV Pack Two 79</button>
+        <button type="button" class="pick" data-pick="xev-three" aria-pressed="false">XEV Pack Three 79</button>
+        <button type="button" class="pick on" data-pick="sl7-dyn" aria-pressed="true">Sealion 7 Dynamic</button>
+        <button type="button" class="pick on" data-pick="model-y" aria-pressed="true">Model Y Premium RWD</button>
+        <button type="button" class="pick" data-pick="atto3" aria-pressed="false">Atto 3</button>
+        <button type="button" class="pick" data-pick="sl7-prem" aria-pressed="false">Sealion 7 Premium</button>
+        <button type="button" class="pick" data-pick="harrier" aria-pressed="false">Harrier Fearless+ 75</button>
+        <button type="button" class="pick" data-pick="ex30" aria-pressed="false">EX30 Ultra</button>
+        <button type="button" class="pick" data-pick="be6" aria-pressed="false">BE 6 sidecar</button>
+      </div>
+      <p class="caption" id="picker-status">Three selected. Compare is on.</p>
+      <button type="button" class="compare" id="compare">Compare</button>
+    </aside>
+
     <aside class="dealer">
       <p class="eyebrow">VST BYD Bommanahalli</p>
       <p style="margin:0; color: var(--stone); font-weight: 300;">Dealer sheet effective 21 August 2026, KA tax charged. Quote, not an invoice. Atto 3 is Dynamic-only in this path: ₹28,99,842. Sealion 7 Dynamic ₹49,15,961. Sealion 7 Premium ₹58,49,279. Prefer these over aggregator on-road for those three.</p>
     </aside>
 
-    <aside class="sidecar">
+    <aside class="sidecar" data-car="be6">
       <p class="eyebrow">Sidecar, not an eighth column</p>
       <p style="margin:0; color: var(--stone); font-weight: 300;">Mahindra BE 6 SPORTEQ THREE+ 79 is the smaller coupe sibling, ₹24.95 lakh ex-showroom, same network, one-pedal, Harman Kardon, ground clearance, and warranty, worse rear and boot. It is a reason the 9e exists. Sit it only after the 9e, and only if the 9e roof is a hard fail.</p>
     </aside>
 
     <hr class="rule">
 
-    <p class="eyebrow">Seven cars</p>
+    <p class="eyebrow">This trio</p>
     <h2>How they sit next to each other</h2>
     <p class="caption" style="margin-bottom: 28px;">Length bars are to the Sealion's 4830 mm. Ground-clearance stacks are drawn to the XEV's 207 mm unladen. Harrier 163 mm is laden. The others are unladen or Autocar. Not the same test. Not a spec sheet.</p>
 
     <div class="cars-scroll">
     <div class="cars">
-      <article class="car">
+      <article class="car" data-car="xev-two">
         <p class="eyebrow">Mahindra</p>
         <h3>XEV 9e Pack Two 79</h3>
         <p class="price">₹26.50L ex · ~₹31.0-31.7L BLR</p>
@@ -207,7 +263,25 @@
           <li>Harman Kardon 16, Atmos</li>
         </ul>
       </article>
-      <article class="car">
+      
+      <article class="car" data-car="xev-three">
+        <p class="eyebrow">Mahindra</p>
+        <h3>XEV 9e Pack Three 79</h3>
+        <p class="price">₹30.50L ex · ~₹35.7-36.3L BLR</p>
+        <p class="bar-label">Length 4789 mm</p>
+        <div class="track"><div class="fill" style="width:99.15%"></div></div>
+        <div class="gc-row">
+          <div class="gc-gap" style="height:40px"></div>
+          <span class="caption">207 mm unladen. Same body as Two</span>
+        </div>
+        <ul class="tells">
+          <li>Same one-pedal, same 79 kWh, same rear as Two</li>
+          <li>7 airbags (knee). Autocar range test is this car</li>
+          <li>Harman Kardon 16. Autocar pick was still Pack Two</li>
+        </ul>
+      </article>
+
+      <article class="car" data-car="atto3">
         <p class="eyebrow">BYD</p>
         <h3>Atto 3 Superior</h3>
         <p class="price">₹34.49L ex. VST quoted Dynamic only, ₹28,99,842</p>
@@ -223,7 +297,7 @@
           <li>Dirac HD 8 on Superior. Dynamic is 6 speakers, no ADAS</li>
         </ul>
       </article>
-      <article class="car">
+      <article class="car" data-car="sl7-dyn">
         <p class="eyebrow">BYD</p>
         <h3>Sealion 7 Dynamic</h3>
         <p class="price">₹41.90L intro · VST ₹49,15,961 BLR</p>
@@ -239,7 +313,7 @@
           <li>Dynaudio 10, black cabin, not leather</li>
         </ul>
       </article>
-      <article class="car">
+      <article class="car" data-car="sl7-prem">
         <p class="eyebrow">BYD</p>
         <h3>Sealion 7 Premium</h3>
         <p class="price">₹49.90L ex · VST ₹58,49,279 BLR</p>
@@ -255,7 +329,7 @@
           <li>Dynaudio 12, HUD, DAW, leather</li>
         </ul>
       </article>
-      <article class="car">
+      <article class="car" data-car="model-y">
         <p class="eyebrow">Tesla</p>
         <h3>Model Y Premium RWD</h3>
         <p class="price">₹50.89L ex · CarWale ₹58,74,913 BLR</p>
@@ -271,7 +345,7 @@
           <li>9 unbranded speakers. Design not elegant</li>
         </ul>
       </article>
-      <article class="car">
+      <article class="car" data-car="harrier">
         <p class="eyebrow">Tata</p>
         <h3>Harrier EV Fearless+ 75</h3>
         <p class="price">₹25.19L ex · CarWale ₹29.34L BLR</p>
@@ -287,7 +361,7 @@
           <li>JBL 10. ADAS is Empowered-only</li>
         </ul>
       </article>
-      <article class="car">
+      <article class="car" data-car="ex30">
         <p class="eyebrow">Volvo</p>
         <h3>EX30 Ultra RWD</h3>
         <p class="price">₹41.00L ex · CarDekho ₹47.83L BLR</p>
@@ -301,6 +375,23 @@
           <li>One-pedal yes, can halt</li>
           <li>Rear fail: knees-up, two-across, no recline, no vents</li>
           <li>HK 9-speaker 1040W + soundbar. Elegance rival to Sealion</li>
+        </ul>
+      </article>
+
+      <article class="car" data-car="be6">
+        <p class="eyebrow">Mahindra</p>
+        <h3>BE 6 SPORTEQ THREE+ 79</h3>
+        <p class="price">₹24.95L ex · on-road BLR <span class="unk">unknown</span></p>
+        <p class="bar-label">Length <span class="unk">unknown</span> here. Smaller coupe sibling</p>
+        <div class="track"><div class="fill" style="width:0"></div></div>
+        <div class="gc-row">
+          <div class="gc-gap" style="height:8px"></div>
+          <span class="caption">Same GC family as 9e. Exact millimetres not re-sourced here</span>
+        </div>
+        <ul class="tells">
+          <li>Same network, one-pedal, Harman, warranty</li>
+          <li>Worse rear and boot. A reason the 9e exists</li>
+          <li>Do not cheap-path here unless the 9e roof is a hard fail</li>
         </ul>
       </article>
     </div>
@@ -370,54 +461,71 @@
     <p class="eyebrow">Trade</p>
     <h2>What you get, what you give up</h2>
     <div class="split" style="margin-top: 28px;">
-      <article class="panel getgive">
+      <article class="panel getgive" data-car="xev-two">
         <h3>XEV 9e Pack Two 79</h3>
         <span class="lab">You get</span>
         <p>The family rear, one-pedal to a halt, 207 mm, Harman Kardon, Bharat NCAP on this car, the Mahindra map, a lifetime first-owner pack, and the strongest protocol range test in the set. It is still the cheap car among the cars that fit the list.</p>
         <span class="lab">You give up</span>
         <p>Quiet luxury. Rear vents. A 6-year vehicle warranty. A long in-service record. Headroom for a tall rear passenger on a coupe roof. Chargers are extra.</p>
       </article>
-      <article class="panel getgive">
+      
+      <article class="panel getgive" data-car="xev-three">
+        <h3>XEV 9e Pack Three 79</h3>
+        <span class="lab">You get</span>
+        <p>The same 79 kWh pack, rear, one-pedal, Harman Kardon, GC, network, and Bharat NCAP as Pack Two. Plus a 7th knee airbag, flagship trim, and the Autocar instrumented car (7.45s, combined 456 km). On-road Bengaluru about ₹35.67L table / ₹36.26L detailed. 11.2 kW path ₹36.54L / ₹37.10L.</p>
+        <span class="lab">You give up</span>
+        <p>About ₹4 lakh ex versus Pack Two 79, and Autocar still picked Pack Two. Same coupe headroom and no rear vents. Cars24 Jul 2026 ₹29.95L cut is unconfirmed. Not the default trio: same maker as Two.</p>
+      </article>
+
+      <article class="panel getgive" data-car="atto3">
         <h3>Atto 3 Superior</h3>
         <span class="lab">You get</span>
         <p>The longest India tenure, this trim's far-side airbag and ADAS, Dirac 8, a 6-year vehicle warranty. VST will not quote this trim. The sheet is Dynamic-only at ₹28,99,842.</p>
         <span class="lab">You give up</span>
         <p>Recline, one-pedal, size, elegance, and any service advantage. Dynamic also drops ADAS, far-side airbag, and Dirac. It does not win his list. Do not cheap-path to it.</p>
       </article>
-      <article class="panel getgive">
+      <article class="panel getgive" data-car="sl7-dyn">
         <h3>Sealion 7 Dynamic</h3>
         <span class="lab">You get</span>
         <p>The shape. Ocean Aesthetics, longest wheelbase, significant recline, chauffeur legroom, 11 airbags and ADAS, FSD dampers, intro pricing, VST on-road ₹49,15,961, and a campaign charger plus 10-year RSA and LV LFP. This is the Sealion to buy if the cabin is the reason.</p>
         <span class="lab">You give up</span>
         <p>One-pedal, 207 mm, Harman, Bharat NCAP on an India car, and density of workshops. Real-world range is <span class="unk">unknown</span>. Interior is black, not leather. Euro NCAP was a 2225 kg Comfort, not this 2160 kg car.</p>
       </article>
-      <article class="panel getgive">
+      <article class="panel getgive" data-car="sl7-prem">
         <h3>Sealion 7 Premium</h3>
         <span class="lab">You get</span>
         <p>82.56 kWh, 230 kW, Dynaudio 12, HUD, DAW, genuine leather, Tahiti Blue, 11 kW AC, VST on-road ₹58,49,279, and a Euro NCAP kerb that matches this trim. Same body and same rear as Dynamic.</p>
         <span class="lab">You give up</span>
         <p>Another ~₹8 lakh that does not buy service, one-pedal, or ground clearance. Still no i-Pedal. Still five KA sites.</p>
       </article>
-      <article class="panel getgive">
+      <article class="panel getgive" data-car="model-y">
         <h3>Model Y Premium RWD</h3>
         <span class="lab">You get</span>
         <p>One-pedal, a power-recline 5-seat bench, Autopilot, Euro NCAP 5-star on a list that includes RWD RHD, 822 + 117 litres of space, and a 5.9 s claimed 0-100. India mid-pack. Juniper, Shanghai CBU. LR RWD died 29 May 2026. Performance is not sold. Sibling six-seat AWD is ₹61.99 lakh.</p>
         <span class="lab">You give up</span>
         <p>Elegance, Karnataka service density, audio, and about ₹27 lakh versus the XEV on the road. Combined test 371 km is below the XEV 456. Airbag count conflicts. Bharat NCAP is <span class="unk">unknown</span>. No confirmed live Supercharger in Bengaluru.</p>
       </article>
-      <article class="panel getgive">
+      <article class="panel getgive" data-car="harrier">
         <h3>Harrier EV Fearless+ 75</h3>
         <span class="lab">You get</span>
         <p>A traditional roof, Tata.ev bay density, Bharat NCAP 5-star on the India EV, a lifetime first-owner pack, and a price next to the XEV (₹25.19 lakh ex, wallbox +₹49k). Siblings: Fearless+ 65 ₹24.19 lakh (8% KA tax cliff), Empowered 75 ₹27.69 lakh (ADAS L2), Fearless+ QWD 75 ₹26.69 lakh. 5-seat only.</p>
         <span class="lab">You give up</span>
         <p>Recline, a true halt, 207 mm, ADAS on this trim, and an independent 75 RWD range test. Rear is 2 headrests and weak thigh. 0-100 RWD is <span class="unk">unknown</span>. Early brake / ESC / OTA issues, no MoRTH recall ID. Sit it only if the tall roof beats 9e recline.</p>
       </article>
-      <article class="panel getgive">
+      <article class="panel getgive" data-car="ex30">
         <h3>EX30 Ultra RWD</h3>
         <span class="lab">You get</span>
         <p>Design that rivals the Sealion on a smaller car, official 5.3 s, Harman Kardon 1040 W plus soundbar, one-pedal that can halt, Google built-in, 11 kW wallbox included, Hosakote CKD, Euro NCAP 5-star on this powertrain, DC 10-80 in 28 min at 175 kW. India has this one car only. Twin Motor, Core, Plus, 51 kWh LFP, and Cross Country are not sold. Intro ₹39.99L died 19 Oct 2025. Now ₹41.00L ex.</p>
         <span class="lab">You give up vs the XEV</span>
         <p>Rear, boot (318 L), KA workshop density, India Bharat NCAP, about ₹16-18 lakh, 207 mm GC, and the sourced 456 km. vs Sealion Dynamic: rear (2930 mm WB vs 821 mm official leg), 11 airbags, 500 L boot, presence. You gain one-pedal, Harman, local assembly, at similar on-road money. It fails the weight he ranked first.</p>
+      </article>
+
+      <article class="panel getgive" data-car="be6">
+        <h3>BE 6 SPORTEQ THREE+ 79</h3>
+        <span class="lab">You get</span>
+        <p>₹24.95 lakh ex-showroom, same Mahindra network, one-pedal, Harman Kardon, ground clearance family, and warranty as the 9e, on a smaller coupe.</p>
+        <span class="lab">You give up</span>
+        <p>Rear and boot versus the 9e. On-road Bengaluru is <span class="unk">unknown</span> here. Sit it only after the 9e, and only if the 9e roof is a hard fail.</p>
       </article>
     </div>
 
@@ -432,155 +540,170 @@
       <thead>
         <tr>
           <th>Spec</th>
-          <th>XEV Pack Two 79</th>
-          <th>Atto 3 Superior</th>
-          <th>SL7 Dynamic</th>
-          <th>SL7 Premium</th>
-          <th>Model Y Prem RWD</th>
-          <th>Harrier F+ 75 RWD</th>
-          <th>EX30 Ultra RWD</th>
+          <th data-car="xev-two">XEV Pack Two 79</th>
+          <th data-car="xev-three">XEV Pack Three 79</th>
+          <th data-car="atto3">Atto 3 Superior</th>
+          <th data-car="sl7-dyn">SL7 Dynamic</th>
+          <th data-car="sl7-prem">SL7 Premium</th>
+          <th data-car="model-y">Model Y Prem RWD</th>
+          <th data-car="harrier">Harrier F+ 75 RWD</th>
+          <th data-car="ex30">EX30 Ultra RWD</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>Ex-showroom</td>
-          <td>₹26.50L</td>
-          <td>₹34.49L. Dynamic ₹24.99L</td>
-          <td>₹41.90L intro</td>
-          <td>₹49.90L</td>
-          <td>₹50.89L. FSD option ₹6L, parking only, not legal</td>
-          <td>₹25.19L. Wallbox +₹49k</td>
-          <td>₹41.00L. Intro ₹39.99L died 19 Oct 2025</td>
+          <td data-car="xev-two">₹26.50L</td>
+          <td data-car="xev-three">₹30.50L</td>
+          <td data-car="atto3">₹34.49L. Dynamic ₹24.99L</td>
+          <td data-car="sl7-dyn">₹41.90L intro</td>
+          <td data-car="sl7-prem">₹49.90L</td>
+          <td data-car="model-y">₹50.89L. FSD option ₹6L, parking only, not legal</td>
+          <td data-car="harrier">₹25.19L. Wallbox +₹49k</td>
+          <td data-car="ex30">₹41.00L. Intro ₹39.99L died 19 Oct 2025</td>
         </tr>
         <tr>
           <td>On-road BLR</td>
-          <td>CarDekho ₹31.03L table / ₹31.66L detailed</td>
-          <td>VST Dynamic ₹28,99,842. Superior not on that sheet. Aggregator Superior ~₹40.1-40.4L</td>
-          <td>VST ₹49,15,961. Ignore Autocar RTO 0</td>
-          <td>VST ₹58,49,279. Ignore Autocar low-RTO</td>
-          <td>CarWale ₹58,74,913 (RTO in)</td>
-          <td>CarWale ₹29.34L</td>
-          <td>CarDekho ₹47,83,117 (RTO ₹4,63,600). CarWale ₹49,21,262 (EW+accessories). Reject Cars24 ₹42.19L</td>
+          <td data-car="xev-two">CarDekho ₹31.03L table / ₹31.66L detailed</td>
+          <td data-car="xev-three">CarDekho ₹35.67L table / ₹36.26L detailed. 11.2 kW ₹36.54L / ₹37.10L</td>
+          <td data-car="atto3">VST Dynamic ₹28,99,842. Superior not on that sheet. Aggregator Superior ~₹40.1-40.4L</td>
+          <td data-car="sl7-dyn">VST ₹49,15,961. Ignore Autocar RTO 0</td>
+          <td data-car="sl7-prem">VST ₹58,49,279. Ignore Autocar low-RTO</td>
+          <td data-car="model-y">CarWale ₹58,74,913 (RTO in)</td>
+          <td data-car="harrier">CarWale ₹29.34L</td>
+          <td data-car="ex30">CarDekho ₹47,83,117 (RTO ₹4,63,600). CarWale ₹49,21,262 (EW+accessories). Reject Cars24 ₹42.19L</td>
         </tr>
         <tr>
           <td>Battery</td>
-          <td>79 kWh LFP blade. Usable <span class="unk">unknown</span></td>
-          <td>60.48 kWh Blade Superior. Dynamic 49.92. Usable <span class="unk">unknown</span></td>
-          <td>71.8 kWh Blade. Usable <span class="unk">unknown</span></td>
-          <td>82.56 kWh Blade. Usable <span class="unk">unknown</span></td>
-          <td>Autocar 60 usable / 64 gross LFP, not Tesla-official. Shanghai CBU Juniper</td>
-          <td>75 kWh LFP. Usable <span class="unk">unknown</span></td>
-          <td>69 kWh nominal NMC. Usable <span class="unk">unknown</span>. Not the Autocar 65 kWh listing</td>
+          <td data-car="xev-two">79 kWh LFP blade. Usable <span class="unk">unknown</span></td>
+          <td data-car="xev-three">79 kWh LFP blade, same pack. Usable <span class="unk">unknown</span></td>
+          <td data-car="atto3">60.48 kWh Blade Superior. Dynamic 49.92. Usable <span class="unk">unknown</span></td>
+          <td data-car="sl7-dyn">71.8 kWh Blade. Usable <span class="unk">unknown</span></td>
+          <td data-car="sl7-prem">82.56 kWh Blade. Usable <span class="unk">unknown</span></td>
+          <td data-car="model-y">Autocar 60 usable / 64 gross LFP, not Tesla-official. Shanghai CBU Juniper</td>
+          <td data-car="harrier">75 kWh LFP. Usable <span class="unk">unknown</span></td>
+          <td data-car="ex30">69 kWh nominal NMC. Usable <span class="unk">unknown</span>. Not the Autocar 65 kWh listing</td>
         </tr>
         <tr>
           <td>Claimed range</td>
-          <td>MIDC 656 km / WLTP 533 km</td>
-          <td>ARAI 521 / NEDC 480 (Superior). Dynamic ARAI 468 / NEDC 410</td>
-          <td>NEDC 520 km</td>
-          <td>NEDC 567 km</td>
-          <td>500 km WLTP, not ARAI</td>
-          <td>627 km MIDC RWD</td>
-          <td>480 km WLTP. Aggregators mislabel ARAI</td>
+          <td data-car="xev-two">MIDC 656 km / WLTP 533 km</td>
+          <td data-car="xev-three">MIDC 656 km / WLTP 533 km</td>
+          <td data-car="atto3">ARAI 521 / NEDC 480 (Superior). Dynamic ARAI 468 / NEDC 410</td>
+          <td data-car="sl7-dyn">NEDC 520 km</td>
+          <td data-car="sl7-prem">NEDC 567 km</td>
+          <td data-car="model-y">500 km WLTP, not ARAI</td>
+          <td data-car="harrier">627 km MIDC RWD</td>
+          <td data-car="ex30">480 km WLTP. Aggregators mislabel ARAI</td>
         </tr>
         <tr>
           <td>Tested range</td>
-          <td>Pack Three 79 Autocar Jul 2025: city 425 / hwy 488 / combined 456 km</td>
-          <td>Overdrive 2022: 467 km. Autocar: expect at least 400</td>
-          <td><span class="unk">unknown</span> (launched 20 Aug 2026)</td>
-          <td>Autocar first drive "close to 500," not protocol. Not the AWD 374.5</td>
-          <td>Autocar 16 Aug 2026 Mumbai Chill AC 22C: city ~350 / hwy ~391 / combined ~370-371 km</td>
-          <td>QWD only Autocar combined 401 km. 75 RWD independent <span class="unk">unknown</span></td>
-          <td>CarWale 24 Sep 2025: 403 km to empty, AC 23C, mostly city. Autocar 350+, not protocol</td>
+          <td data-car="xev-two">Shares the 79 pack. Instrumented run is Pack Three, not Two</td>
+          <td data-car="xev-three">Autocar Jul 2025: city 425 / hwy 488 / combined 456 km. This is the test car</td>
+          <td data-car="atto3">Overdrive 2022: 467 km. Autocar: expect at least 400</td>
+          <td data-car="sl7-dyn"><span class="unk">unknown</span> (launched 20 Aug 2026)</td>
+          <td data-car="sl7-prem">Autocar first drive "close to 500," not protocol. Not the AWD 374.5</td>
+          <td data-car="model-y">Autocar 16 Aug 2026 Mumbai Chill AC 22C: city ~350 / hwy ~391 / combined ~370-371 km</td>
+          <td data-car="harrier">QWD only Autocar combined 401 km. 75 RWD independent <span class="unk">unknown</span></td>
+          <td data-car="ex30">CarWale 24 Sep 2025: 403 km to empty, AC 23C, mostly city. Autocar 350+, not protocol</td>
         </tr>
         <tr>
           <td>Drive</td>
-          <td>210 kW RWD. 6.8s claimed / 7.45s instrumented (Pack Three)</td>
-          <td>150 kW FWD. Superior 7.3s. Dynamic 7.9s</td>
-          <td>170 kW RWD. 7.3s. Kerb 2160 kg</td>
-          <td>230 kW RWD. 6.7s. Kerb 2225 kg</td>
-          <td>299 hp / 420 Nm RWD. 0-100 5.9 s claimed</td>
-          <td>RWD 238 PS / 315 Nm. 0-100 RWD <span class="unk">unknown</span></td>
-          <td>200 kW / 272 hp / 343 Nm RWD. 0-100 official 5.3 s (Autocar 5.7 stale). Top 180</td>
+          <td data-car="xev-two">210 kW RWD. 6.8s claimed. Instrumented 7.45s is Pack Three</td>
+          <td data-car="xev-three">210 kW RWD. 6.8s claimed / 7.45s instrumented. Kerb 2,201 kg</td>
+          <td data-car="atto3">150 kW FWD. Superior 7.3s. Dynamic 7.9s</td>
+          <td data-car="sl7-dyn">170 kW RWD. 7.3s. Kerb 2160 kg</td>
+          <td data-car="sl7-prem">230 kW RWD. 6.7s. Kerb 2225 kg</td>
+          <td data-car="model-y">299 hp / 420 Nm RWD. 0-100 5.9 s claimed</td>
+          <td data-car="harrier">RWD 238 PS / 315 Nm. 0-100 RWD <span class="unk">unknown</span></td>
+          <td data-car="ex30">200 kW / 272 hp / 343 Nm RWD. 0-100 official 5.3 s (Autocar 5.7 stale). Top 180</td>
         </tr>
         <tr>
           <td>Size / boot</td>
-          <td>4789 mm, WB 2775, boot 663 + 150 frunk, 5-seat, no captains</td>
-          <td>4455 mm, WB 2720, boot 440, no recline</td>
-          <td>4830 mm, WB 2930, boot 500 + 58 frunk, coupe</td>
-          <td>Same body as Dynamic</td>
-          <td>4790 x 1982 x 1624, WB 2890, boot 822 + frunk 117, 5-seat power-recline</td>
-          <td>4607 x 1922 x 1740, WB 2741, boot 502 + frunk 67 L RWD, 5-seat only</td>
-          <td>4233 x ~1838 x ~1550, WB 2650, boot 318 (max 1000 incl 61 under-floor), frunk 7 L. Official rear leg 821 / head 974</td>
+          <td data-car="xev-two">4789 mm, WB 2775, boot 663 + 150 frunk, 5-seat, no captains</td>
+          <td data-car="xev-three">Same body as Two. Coupe rear can feel boat-like (Autocar)</td>
+          <td data-car="atto3">4455 mm, WB 2720, boot 440, no recline</td>
+          <td data-car="sl7-dyn">4830 mm, WB 2930, boot 500 + 58 frunk, coupe</td>
+          <td data-car="sl7-prem">Same body as Dynamic</td>
+          <td data-car="model-y">4790 x 1982 x 1624, WB 2890, boot 822 + frunk 117, 5-seat power-recline</td>
+          <td data-car="harrier">4607 x 1922 x 1740, WB 2741, boot 502 + frunk 67 L RWD, 5-seat only</td>
+          <td data-car="ex30">4233 x ~1838 x ~1550, WB 2650, boot 318 (max 1000 incl 61 under-floor), frunk 7 L. Official rear leg 821 / head 974</td>
         </tr>
         <tr>
           <td>GC</td>
-          <td>207 mm unladen / 218 at battery. Laden <span class="unk">unknown</span></td>
-          <td>175 mm official</td>
-          <td>170 mm Autocar. Official <span class="unk">unknown</span></td>
-          <td>170 mm Autocar. Official <span class="unk">unknown</span></td>
-          <td>167 mm</td>
-          <td>163 mm laden</td>
-          <td>Conflict 165/171/177. No OEM India figure</td>
+          <td data-car="xev-two">207 mm unladen / 218 at battery. Laden <span class="unk">unknown</span></td>
+          <td data-car="xev-three">207 mm unladen / 218 at battery. Laden <span class="unk">unknown</span></td>
+          <td data-car="atto3">175 mm official</td>
+          <td data-car="sl7-dyn">170 mm Autocar. Official <span class="unk">unknown</span></td>
+          <td data-car="sl7-prem">170 mm Autocar. Official <span class="unk">unknown</span></td>
+          <td data-car="model-y">167 mm</td>
+          <td data-car="harrier">163 mm laden</td>
+          <td data-car="ex30">Conflict 165/171/177. No OEM India figure</td>
         </tr>
         <tr>
           <td>One-pedal</td>
-          <td>Yes. L0-L3 + Auto, can halt to 0</td>
-          <td>No. Will not stop</td>
-          <td>No i-Pedal. Will not stop to 0</td>
-          <td>No i-Pedal. Will not stop to 0</td>
-          <td>Yes (Standard regen)</td>
-          <td>Brochure "single pedal." Autocar: will not halt, crawls. Regen 0-3</td>
-          <td>Yes, can halt (Autocar). Regen: Autocar on/off; CarWale FD selectable. Flag</td>
+          <td data-car="xev-two">Yes. L0-L3 + Auto, can halt to 0</td>
+          <td data-car="xev-three">Yes. L0-L3 + Auto, can halt to 0</td>
+          <td data-car="atto3">No. Will not stop</td>
+          <td data-car="sl7-dyn">No i-Pedal. Will not stop to 0</td>
+          <td data-car="sl7-prem">No i-Pedal. Will not stop to 0</td>
+          <td data-car="model-y">Yes (Standard regen)</td>
+          <td data-car="harrier">Brochure "single pedal." Autocar: will not halt, crawls. Regen 0-3</td>
+          <td data-car="ex30">Yes, can halt (Autocar). Regen: Autocar on/off; CarWale FD selectable. Flag</td>
         </tr>
         <tr>
           <td>Audio</td>
-          <td>Harman Kardon 16 / 15+sub 1400W Atmos</td>
-          <td>Dirac HD 8 Superior. Dynamic 6 speakers</td>
-          <td>Dynaudio 10</td>
-          <td>Dynaudio 12</td>
-          <td>9 unbranded</td>
-          <td>JBL 10 from Fearless+</td>
-          <td>9-speaker 1040 W Harman Kardon + soundbar. Google built-in</td>
+          <td data-car="xev-two">Harman Kardon 16 / 15+sub 1400W Atmos</td>
+          <td data-car="xev-three">Harman Kardon 16 / 15+sub 1400W Atmos (Pack Two+)</td>
+          <td data-car="atto3">Dirac HD 8 Superior. Dynamic 6 speakers</td>
+          <td data-car="sl7-dyn">Dynaudio 10</td>
+          <td data-car="sl7-prem">Dynaudio 12</td>
+          <td data-car="model-y">9 unbranded</td>
+          <td data-car="harrier">JBL 10 from Fearless+</td>
+          <td data-car="ex30">9-speaker 1040 W Harman Kardon + soundbar. Google built-in</td>
         </tr>
         <tr>
           <td>NCAP</td>
-          <td>Bharat NCAP 5-star Jan 2025, this India car, AOP 32/32</td>
-          <td>Euro NCAP 5-star 2022 European LHD. Sibling, not India Dyn/Prem spec</td>
-          <td>Euro NCAP 5-star Comfort LHD 2225 kg. This kerb 2160, coverage <span class="unk">unknown</span></td>
-          <td>Euro NCAP 5-star Apr 2025 Comfort LHD 2225 kg, matches this kerb</td>
-          <td>Euro NCAP 5-star Nov 2025 AWD LHD; list includes RWD RHD. Bharat NCAP <span class="unk">unknown</span></td>
-          <td>Bharat NCAP 5-star, India-sold EV, whole EV range. Do not use ICE scores</td>
-          <td>Euro NCAP 5-star Dec 2024 Plus SMER 1775 kg, this Ultra 4x2 included. Not Bharat NCAP</td>
+          <td data-car="xev-two">Bharat NCAP 5-star Jan 2025, tested on Pack Three, applies all, AOP 32/32</td>
+          <td data-car="xev-three">Bharat NCAP 5-star Jan 2025, this test car, AOP 32/32, applies all</td>
+          <td data-car="atto3">Euro NCAP 5-star 2022 European LHD. Sibling, not India Dyn/Prem spec</td>
+          <td data-car="sl7-dyn">Euro NCAP 5-star Comfort LHD 2225 kg. This kerb 2160, coverage <span class="unk">unknown</span></td>
+          <td data-car="sl7-prem">Euro NCAP 5-star Apr 2025 Comfort LHD 2225 kg, matches this kerb</td>
+          <td data-car="model-y">Euro NCAP 5-star Nov 2025 AWD LHD; list includes RWD RHD. Bharat NCAP <span class="unk">unknown</span></td>
+          <td data-car="harrier">Bharat NCAP 5-star, India-sold EV, whole EV range. Do not use ICE scores</td>
+          <td data-car="ex30">Euro NCAP 5-star Dec 2024 Plus SMER 1775 kg, this Ultra 4x2 included. Not Bharat NCAP</td>
         </tr>
         <tr>
           <td>Airbags / ADAS</td>
-          <td>6 airbags Pack Two, ADAS L2. 7 airbags from Pack Three</td>
-          <td>Far-side + full ADAS on Superior. Dyn/Prem omit both</td>
-          <td>11 airbags + L2 ADAS. No DAW, no HUD</td>
-          <td>11 airbags + L2 ADAS, DAW, HUD</td>
-          <td>Airbag count conflicts 7/9/10. Autopilot std. FSD not legal</td>
-          <td>7 airbags Fearless+. ADAS Empowered only</td>
-          <td>7 airbags incl centre (not aggregator 6). Google built-in</td>
+          <td data-car="xev-two">6 airbags, ADAS L2</td>
+          <td data-car="xev-three">7 airbags (knee), ADAS L2</td>
+          <td data-car="atto3">Far-side + full ADAS on Superior. Dyn/Prem omit both</td>
+          <td data-car="sl7-dyn">11 airbags + L2 ADAS. No DAW, no HUD</td>
+          <td data-car="sl7-prem">11 airbags + L2 ADAS, DAW, HUD</td>
+          <td data-car="model-y">Airbag count conflicts 7/9/10. Autopilot std. FSD not legal</td>
+          <td data-car="harrier">7 airbags Fearless+. ADAS Empowered only</td>
+          <td data-car="ex30">7 airbags incl centre (not aggregator 6). Google built-in</td>
         </tr>
         <tr>
           <td>Warranty</td>
-          <td>3 yr unlimited vehicle. HV lifetime 1st private owner (70% SOH). Motor 8 yr / 160k. Transfer 10 yr / 200k</td>
-          <td>6 yr / 150k vehicle. HV 8 yr / 160k</td>
-          <td>6 yr / 150k vehicle, HV 8 yr / 160k. Campaign: +10 yr LV LFP + RSA + free 7 kW</td>
-          <td>6 yr / 150k vehicle, HV 8 yr / 160k</td>
-          <td>At launch: 4 yr / 80k km vehicle. RWD pack 8 yr / 160k km</td>
-          <td>Pack lifetime 1st private owner. Motor 8 yr / 1.6L km. Vehicle 3 yr / 1.25L km</td>
-          <td>Vehicle 3 yr (km <span class="unk">unknown</span>). Pack 8 yr / 160,000 km. Autocar "2 yr unlimited" is junk</td>
+          <td data-car="xev-two">3 yr unlimited vehicle. HV lifetime 1st private owner (70% SOH). Motor 8 yr / 160k. Transfer 10 yr / 200k</td>
+          <td data-car="xev-three">Same warranty as Two</td>
+          <td data-car="atto3">6 yr / 150k vehicle. HV 8 yr / 160k</td>
+          <td data-car="sl7-dyn">6 yr / 150k vehicle, HV 8 yr / 160k. Campaign: +10 yr LV LFP + RSA + free 7 kW</td>
+          <td data-car="sl7-prem">6 yr / 150k vehicle, HV 8 yr / 160k</td>
+          <td data-car="model-y">At launch: 4 yr / 80k km vehicle. RWD pack 8 yr / 160k km</td>
+          <td data-car="harrier">Pack lifetime 1st private owner. Motor 8 yr / 1.6L km. Vehicle 3 yr / 1.25L km</td>
+          <td data-car="ex30">Vehicle 3 yr (km <span class="unk">unknown</span). Pack 8 yr / 160,000 km. Autocar "2 yr unlimited" is junk</td>
         </tr>
         <tr>
           <td>Charge / network</td>
-          <td>DC 20-80 in 20 min needs 140-180 kW. AC boxes extra. ~1100 Mahindra service</td>
-          <td>DC 0-80 in 50 min at 80 kW (Superior). Dynamic DC 70 kW. 5 official KA BYD sites</td>
-          <td>DC Support 110 kW. 10-80 <span class="unk">unknown</span>. 5 official KA sites</td>
-          <td>Autocar 10-80 in 45 min at 150 kW. AC 11 kW. 5 official KA sites</td>
-          <td>Whitefield EC from 14 May 2026. 5 Superchargers announced, none confirmed live in BLR. Body shop Pune</td>
-          <td>Tata.ev ~1,500 EV bays. BLR KHT / Prerana. Harrier-EV workshop count <span class="unk">unknown</span></td>
-          <td>11 kW wallbox included. DC 10-80 official 28 min @ 175 kW. Martial Race Course sales + T.C. Halli / Sarjapur. 23/25 India</td>
+          <td data-car="xev-two">DC 20-80 in 20 min needs 140-180 kW. AC boxes extra. ~1100 Mahindra service</td>
+          <td data-car="xev-three">Same charge path. AC extra ₹50k / ₹75k</td>
+          <td data-car="atto3">DC 0-80 in 50 min at 80 kW (Superior). Dynamic DC 70 kW. 5 official KA BYD sites</td>
+          <td data-car="sl7-dyn">DC Support 110 kW. 10-80 <span class="unk">unknown</span>. 5 official KA sites</td>
+          <td data-car="sl7-prem">Autocar 10-80 in 45 min at 150 kW. AC 11 kW. 5 official KA sites</td>
+          <td data-car="model-y">Whitefield EC from 14 May 2026. 5 Superchargers announced, none confirmed live in BLR. Body shop Pune</td>
+          <td data-car="harrier">Tata.ev ~1,500 EV bays. BLR KHT / Prerana. Harrier-EV workshop count <span class="unk">unknown</span></td>
+          <td data-car="ex30">11 kW wallbox included. DC 10-80 official 28 min @ 175 kW. Martial Race Course sales + T.C. Halli / Sarjapur. 23/25 India</td>
         </tr>
       </tbody>
     </table>
@@ -591,16 +714,16 @@
     <p class="eyebrow">Before money moves</p>
     <h2>What to verify on a test drive</h2>
     <ol class="checks">
-      <li>Rear, 20 minutes and more, with the usual passenger. XEV headroom, recline, 3-across. Sealion under-thigh and the short-backrest conflict. Atto 3 has no recline. Harrier: no recline, 2 headrests, thigh. Model Y: power-recline and glass-roof heat. EX30: knees-up, two-across, no recline, no rear vents. Stop if they hate it.</li>
-      <li>XEV one-pedal L3 to a full stop, and on a slope. Model Y Standard regen to a halt. EX30 halt, and whether regen is on/off only or FD selectable. Confirm the BYDs still need the brake. Harrier regen L3 to a halt, confirm the crawl Autocar described. EX30 Google-only dash.</li>
-      <li>Bengaluru breakers and basement ramps. Sealion 170 mm, Atto 175 mm, Model Y 167 mm, Harrier 163 mm laden. Pack Three rear can feel boat-like. Scrape tests are otherwise <span class="unk">unknown</span>.</li>
-      <li>Same track: Harman Kardon 16 versus Dynaudio 10/12 versus Dirac 8 versus Tesla 9 unbranded versus JBL 10.</li>
-      <li>XEV screens for 15 minutes. Ask firmware and TSBs. Glitches were real. Autocar says largely resolved as of August 2026. Harrier: software TSBs at KHT or Prerana.</li>
-      <li>Night highway in the Sealion: rear wind and road noise.</li>
-      <li>Walk VST Cunningham or PPS Mahadevapura, a Mahindra eSUV workshop, Tesla Whitefield Experience Centre, a Tata.ev HV bay (KHT Domlur / Whitefield / Mahadevapura or Prerana), and Martial T.C. Halli. Parts SLA, loaner, who does HV work. Ask Tesla the live Supercharger date in Bengaluru and the body-shop path (first shop is Pune, 28 Jul 2026).</li>
-      <li>Charge: XEV 20-80 in 20 min needs a rare 140-180 kW gun. Atto 0-80 is 50 min at 80 kW. Sealion Premium 10-80 is 45 min at 150 kW. Dynamic 110 kW 10-80 is <span class="unk">unknown</span>. Model Y: 15-minute Supercharger 20-80 if a stall exists.</li>
-      <li>Get a written Bengaluru on-road quote. Karnataka EV road-tax exemption ended. Notified 10 April 2026. Ignore Autocar Sealion quotes that assume RTO ₹0. Use the VST sheet for the three BYDs; still treat it as a quote. For EX30 ignore Cars24 ₹42.19L. Night glass-roof heat (no blind). Boot with a suitcase (318 L).</li>
-      <li>Empowered 75 only if he wants ADAS on the Harrier. BE 6: same rear-headroom test as the 9e, then sit the 9e immediately after. Do not cheap-path to BE 6 unless the 9e roof is a hard fail.</li>
+      <li data-cars="xev-two xev-three sl7-dyn sl7-prem atto3 model-y harrier ex30 be6">Rear, 20 minutes and more, with the usual passenger. XEV headroom, recline, 3-across. Sealion under-thigh and the short-backrest conflict. Atto 3 has no recline. Harrier: no recline, 2 headrests, thigh. Model Y: power-recline and glass-roof heat. EX30: knees-up, two-across, no recline, no rear vents. Stop if they hate it.</li>
+      <li data-cars="xev-two xev-three model-y ex30 harrier atto3 sl7-dyn sl7-prem">XEV one-pedal L3 to a full stop, and on a slope. Model Y Standard regen to a halt. EX30 halt, and whether regen is on/off only or FD selectable. Confirm the BYDs still need the brake. Harrier regen L3 to a halt, confirm the crawl Autocar described. EX30 Google-only dash.</li>
+      <li data-cars="*">Bengaluru breakers and basement ramps. Sealion 170 mm, Atto 175 mm, Model Y 167 mm, Harrier 163 mm laden. Pack Three rear can feel boat-like. Scrape tests are otherwise <span class="unk">unknown</span>.</li>
+      <li data-cars="*">Same track: Harman Kardon 16 versus Dynaudio 10/12 versus Dirac 8 versus Tesla 9 unbranded versus JBL 10.</li>
+      <li data-cars="xev-two xev-three be6 harrier">XEV screens for 15 minutes. Ask firmware and TSBs. Glitches were real. Autocar says largely resolved as of August 2026. Harrier: software TSBs at KHT or Prerana.</li>
+      <li data-cars="sl7-dyn sl7-prem">Night highway in the Sealion: rear wind and road noise.</li>
+      <li data-cars="*">Walk VST Cunningham or PPS Mahadevapura, a Mahindra eSUV workshop, Tesla Whitefield Experience Centre, a Tata.ev HV bay (KHT Domlur / Whitefield / Mahadevapura or Prerana), and Martial T.C. Halli. Parts SLA, loaner, who does HV work. Ask Tesla the live Supercharger date in Bengaluru and the body-shop path (first shop is Pune, 28 Jul 2026).</li>
+      <li data-cars="*">Charge: XEV 20-80 in 20 min needs a rare 140-180 kW gun. Atto 0-80 is 50 min at 80 kW. Sealion Premium 10-80 is 45 min at 150 kW. Dynamic 110 kW 10-80 is <span class="unk">unknown</span>. Model Y: 15-minute Supercharger 20-80 if a stall exists.</li>
+      <li data-cars="*">Get a written Bengaluru on-road quote. Karnataka EV road-tax exemption ended. Notified 10 April 2026. Ignore Autocar Sealion quotes that assume RTO ₹0. Use the VST sheet for the three BYDs; still treat it as a quote. For EX30 ignore Cars24 ₹42.19L. Night glass-roof heat (no blind). Boot with a suitcase (318 L).</li>
+      <li data-cars="harrier be6 xev-two xev-three">Empowered 75 only if he wants ADAS on the Harrier. BE 6: same rear-headroom test as the 9e, then sit the 9e immediately after. Do not cheap-path to BE 6 unless the 9e roof is a hard fail.</li>
     </ol>
 
     <hr class="rule">
@@ -615,5 +738,60 @@
 
     <p class="foot serif">Suhas Kashyap</p>
   </main>
+
+<script>
+(function () {
+  var DEFAULT = ["xev-two", "sl7-dyn", "model-y"];
+  var selected = DEFAULT.slice();
+  var picks = document.querySelectorAll("[data-pick]");
+  var btn = document.getElementById("compare");
+  var status = document.getElementById("picker-status");
+
+  function sync() {
+    picks.forEach(function (el) {
+      var on = selected.indexOf(el.getAttribute("data-pick")) !== -1;
+      el.classList.toggle("on", on);
+      el.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    var n = selected.length;
+    btn.disabled = n !== 3;
+    status.textContent = n === 3 ? "Three selected. Tap compare." : "Select " + (3 - n) + " more. Compare stays off until then.";
+  }
+
+  function apply() {
+    if (selected.length !== 3) return;
+    document.querySelectorAll("[data-car]").forEach(function (el) {
+      el.hidden = selected.indexOf(el.getAttribute("data-car")) === -1;
+    });
+    document.querySelectorAll("[data-cars]").forEach(function (el) {
+      var raw = el.getAttribute("data-cars");
+      if (raw === "*") { el.hidden = false; return; }
+      var ids = raw.split(/\s+/);
+      el.hidden = !ids.some(function (id) { return selected.indexOf(id) !== -1; });
+    });
+    var cars = document.querySelector(".cars");
+    if (cars) cars.classList.add("trio");
+    var split = document.querySelector(".split");
+    if (split) split.classList.add("trio");
+    var matrix = document.querySelector(".matrix");
+    if (matrix) matrix.classList.add("trio");
+    status.textContent = "Showing that trio. Change picks and tap compare again.";
+  }
+
+  picks.forEach(function (el) {
+    el.addEventListener("click", function () {
+      var id = el.getAttribute("data-pick");
+      var i = selected.indexOf(id);
+      if (i !== -1) selected.splice(i, 1);
+      else if (selected.length < 3) selected.push(id);
+      sync();
+    });
+  });
+  btn.addEventListener("click", apply);
+  sync();
+  apply();
+})();
+</script>
+
 </body>
 </html>
